@@ -7,11 +7,13 @@
     <style>
         body {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
             background-color: #1c1c1c;
+            font-family: 'Arial', sans-serif;
         }
         .wheel {
             width: 300px;
@@ -21,6 +23,7 @@
             overflow: hidden;
             border: 10px solid #333;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            transition: transform 4s ease-out;
         }
         .slice {
             position: absolute;
@@ -54,39 +57,137 @@
             justify-content: center;
             align-items: center;
             color: white;
-            font-family: 'Arial', sans-serif;
         }
-        .pointer {
-            width: 0;
-            height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-bottom: 30px solid #333;
-            position: absolute;
-            top: -15px;
+       .wheel-container {
+    position: relative;
+}
+
+.pointer {
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 30px solid #fff;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+        .spin-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #333;
+            color: white;
+            border: 2px solid #555;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        .spin-button:hover {
+            background-color: #555;
+        }
+        .spin-button:disabled {
+            background-color: #444;
+            cursor: not-allowed;
+        }
+        .notification {
+            display: none;
+            position: fixed;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .notification button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .notification button:hover {
+            background-color: #555;
         }
     </style>
 </head>
 <body>
-    <div class="wheel">
-        <div class="slice"></div>
-        <div class="slice"></div>
-        <div class="slice"></div>
-        <div class="slice"></div>
-        <div class="slice"></div>
-        <div class="slice"></div>
-        <div class="slice"></div>
-        <div class="slice"></div>
-        <div class="slice"></div>
-        <div class="slice"></div>
-        <div class="slice"></div>
-        <div class="slice"></div>
-        <div class="center">
-            <span>Rolls</span>
+    <div class="wheel-container">
+        <div class="wheel" id="wheel">
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="slice"></div>
+            <div class="center">DODEP</div>
         </div>
         <div class="pointer"></div>
     </div>
+    <button class="spin-button" id="spinButton">Spin</button>
+    <div class="notification" id="notification">
+        <div id="resultText"></div>
+        <button onclick="closeNotification()">OK</button>
+    </div>
+</body>
+    <script>
+       const wheel = document.getElementById('wheel');
+const spinButton = document.getElementById('spinButton');
+const notification = document.getElementById('notification');
+const resultText = document.getElementById('resultText');
+let isSpinning = false;
+let currentAngle = 0; // Сохраняем текущий угол колеса
+
+const prizes = [
+    'Pink', ' Light Blue', 'Light Green', 'light plum',
+    'Hon', 'Orange', 'Pink', 'Cyan',
+    'Magenta', 'Lime', 'Brown', 'Black'
+]; // Названия цветов или призов
+
+spinButton.addEventListener('click', () => {
+    if (isSpinning) return;
+    isSpinning = true;
+    spinButton.disabled = true;
+
+    // Случайный угол: 5-10 полных оборотов + случайный сектор
+    const randomSpins = Math.floor(Math.random() * 5 + 5) * 360;
+    const randomDeg = Math.floor(Math.random() * 360);
+    currentAngle += randomSpins + randomDeg; // Накапливаем угол
+
+    // Применяем вращение
+    wheel.style.transform = `rotate(${currentAngle}deg)`;
+
+    // Определяем приз после остановки
+    setTimeout(() => {
+        const sliceAngle = 360 / prizes.length;
+        const finalDeg = currentAngle % 360;
+        const prizeIndex = Math.floor((360 - finalDeg) / sliceAngle) % prizes.length;
+
+        resultText.textContent = `You won: ${prizes[prizeIndex]}!`;
+        notification.style.display = 'block';
+        isSpinning = false;
+        spinButton.disabled = false;
+    }, 4000); // Длительность анимации (должна совпадать с CSS transition)
+});
+
+function closeNotification() {
+    notification.style.display = 'none';
+    // Убрали wheel.style.transform = 'rotate(0deg)'; чтобы колесо не сбрасывалось
+}
+    </script>
 </body>
 </html>
