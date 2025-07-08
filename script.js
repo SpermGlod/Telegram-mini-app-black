@@ -1,0 +1,1 @@
+window.Telegram.WebApp.ready(); // Telegram говорит: приложение загружено
