@@ -1,14 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mini App</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky Wheel</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1c1c1c;
+        }
+        .wheel {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            border: 10px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .slice {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+            clip-path: polygon(0 0, 100% 0, 100% 100%);
+        }
+        .slice:nth-child(1) { transform: rotate(0deg); background: #ff69b4; }
+        .slice:nth-child(2) { transform: rotate(30deg); background: #add8e6; }
+        .slice:nth-child(3) { transform: rotate(60deg); background: #90ee90; }
+        .slice:nth-child(4) { transform: rotate(90deg); background: #dda0dd; }
+        .slice:nth-child(5) { transform: rotate(120deg); background: #ffdead; }
+        .slice:nth-child(6) { transform: rotate(150deg); background: #f0e68c; }
+        .slice:nth-child(7) { transform: rotate(180deg); background: #ff7f50; }
+        .slice:nth-child(8) { transform: rotate(210deg); background: #98fb98; }
+        .slice:nth-child(9) { transform: rotate(240deg); background: #6495ed; }
+        .slice:nth-child(10) { transform: rotate(270deg); background: #ff6347; }
+        .slice:nth-child(11) { transform: rotate(300deg); background: #4682b4; }
+        .slice:nth-child(12) { transform: rotate(330deg); background: #f08080; }
+        .center {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: #000;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+        .pointer {
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 30px solid #333;
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
 </head>
 <body>
-  <div class="center-text">I was born</div>
-  <script src="script.js"></script>
+    <div class="wheel">
+        <div class="slice"></div>
+        <div class="slice"></div>
+        <div class="slice"></div>
+        <div class="slice"></div>
+        <div class="slice"></div>
+        <div class="slice"></div>
+        <div class="slice"></div>
+        <div class="slice"></div>
+        <div class="slice"></div>
+        <div class="slice"></div>
+        <div class="slice"></div>
+        <div class="slice"></div>
+        <div class="center">
+            <span>Rolls</span>
+        </div>
+        <div class="pointer"></div>
+    </div>
 </body>
 </html>
